@@ -1,0 +1,14 @@
+stages:
+   - build_app
+
+include:
+   - local: 'param.yml'
+
+build_app:
+   stage: build_app
+   trigger:
+     include: app/main.yml
+     strategy: depend
+   only:
+    refs:
+     - master

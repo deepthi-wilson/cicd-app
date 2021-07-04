@@ -1,0 +1,39 @@
+image:
+    name: docker:19.03.12
+    entrypoint: [""]
+
+services:
+    - docker:19.03.12-dind
+
+variables:
+    ECR_URL: "${ecr_url}" 
+    REGION: "${region}" 
+    DOCKER_HOST: "${docker_host}" 
+    TASK_DEFN: "${task_defn}" 
+    CLUSTER_NAME: "${cluster_name}" 
+    SVC_NAME: "${svc_name}" 
+
+stages:
+   - build
+   - package
+   - deploy
+
+build:
+   image: node:12.18.4
+   stage: build
+   script:
+      - cd app
+      - npm install
+      - npm test
+   only:
+     - master
+
+
+package:
+   image: node:12.18.4
+   stage: package
+   script:
+      - cd app
+      - npm install pkg
+      - pkg .
+
