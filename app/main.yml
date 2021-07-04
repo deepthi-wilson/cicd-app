@@ -16,6 +16,8 @@ variables:
 stages:
    - build
    - package
+   - sign_windows_exe
+   - sign_macos
    - deploy
 
 build:
@@ -28,7 +30,7 @@ build:
    only:
      - master
 
-
+# Creates installer exe linux and macos executable files
 package:
    image: node:12.18.4
    stage: package
@@ -36,4 +38,14 @@ package:
       - cd app
       - npm install pkg
       - pkg .
+      - ls
+   only:
+      - master
 
+# Sign and Notorize the executables
+
+sign_windows_exe:
+   tags: 
+    - windows
+   stage: sign_windows_exe
+   script: 
